@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import QRCodeComponent from "./QRCodeComponent";
-import { randomString, encrypt, splitString, replaceDotToHashtag } from "@/lib/encrypt";
+import { randomString, encrypt, splitStringInHalf } from "@/lib/encrypt";
 import { saveSecret } from "@/action/saveSecretAction";
 
 
@@ -23,14 +23,13 @@ export default function InputMessageForm() {
 
             setIsPending(true);
 
-            const messageSecretKey = randomString();
-            const _messageEncrypt = await encrypt(message, messageSecretKey);
-            const [messageRefKey, UnusedMessage] = splitString(_messageEncrypt);
-            const _messageUrl = replaceDotToHashtag(_messageEncrypt);
+            const _messageSecretKey = randomString();
+            const _messageEncrypt = await encrypt(message, _messageSecretKey);
+            const [_firstHalfMessage, _secondHalfMessage] = splitStringInHalf(_messageSecretKey);
 
-            setMessageUrl(`${process.env.NEXT_PUBLIC_BASE_URL}/${_messageUrl}`);
+            setMessageUrl(`${process.env.NEXT_PUBLIC_BASE_URL}/${_messageSecretKey}`);
 
-            const response = await saveSecret(messageRefKey, messageSecretKey);
+            const response = await saveSecret(_firstHalfMessage, _messageEncrypt);
             if (response) {
                 setIsSaved(true);
                 setIsPending(false);

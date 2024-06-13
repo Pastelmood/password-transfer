@@ -109,5 +109,20 @@ export function splitString(input: string): [string, string] {
 }
 
 export function replaceDotToHashtag(message: string): string {
-  return message.replace(/\./g, '#');
+  return message.replace(/\./g, "#");
+}
+
+/**
+ * Splits a string into two equal halves.
+ * If the string length is odd, the extra character will go to the second half.
+ * 
+ * @param input - The string to be split.
+ * @returns A tuple containing the two halves of the string.
+ */
+export function splitStringInHalf(input: string): [string, string] {
+  const midpoint = Math.ceil(input.length / 2);
+  const firstHalf = input.substring(0, midpoint);
+  const secondHalf = input.substring(midpoint);
+
+  return [firstHalf, secondHalf];
 }
