@@ -33,8 +33,7 @@ export default function ShowDecryptMessageComponent({ messageSecretKey }: Props)
         fetchMessageEncrypt();
         setIsloading(false);
 
-    }, []);
-
+    }, [firstHalfMessageSecretKey, messageSecretKey]);
 
     return (
         <>
