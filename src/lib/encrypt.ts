@@ -100,17 +100,6 @@ export async function decrypt(
   return dec.decode(decrypted);
 }
 
-export function splitString(input: string): [string, string] {
-  const parts = input.split(".");
-  if (parts.length !== 2) {
-    throw new Error("Input string must contain exactly one dot.");
-  }
-  return [parts[0], parts[1]];
-}
-
-export function replaceDotToHashtag(message: string): string {
-  return message.replace(/\./g, "#");
-}
 
 /**
  * Splits a string into two equal halves.
