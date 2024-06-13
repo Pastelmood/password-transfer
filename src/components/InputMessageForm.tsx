@@ -8,10 +8,9 @@ import { save } from "@/action/saveSecretAction";
 
 export default function InputMessageForm() {
 
-    const [isPending, setIsPending] = useState<boolean>(true);
+    const [isPending, setIsPending] = useState<boolean>(false);
     const [isSaved, setIsSaved] = useState<boolean>(false);
     const [message, setMessage] = useState<string | null>();
-    const [messageEncrypt, setMessageEncrypt] = useState<string>();
     const [messageUrl, setMessageUrl] = useState<string>();
     const [copyButtonText, setCopyButtonText] = useState<string>("Copy");
 
@@ -29,7 +28,6 @@ export default function InputMessageForm() {
             const [messageRefKey, UnusedMessage] = splitString(_messageEncrypt);
             const _messageUrl = replaceDotToHashtag(_messageEncrypt);
 
-            setMessageEncrypt(_messageEncrypt);
             setMessageUrl(`${process.env.NEXT_PUBLIC_BASE_URL}/${_messageUrl}`);
 
             const response = await save(messageRefKey, messageSecretKey);
@@ -73,14 +71,19 @@ export default function InputMessageForm() {
                             {messageUrl}
                         </div>
                     </div>
-                    <p className="text-sm self-start"><strong>Please note: </strong>Do not try to verify the page, as the content is deleted after the first view!</p><p className="text-sm self-start text-sky-500 hover:text-sky-600 hover:underline hover:cursor-pointer" onClick={handleOnClickNewEncrypt}>Encrypt next message.</p><p className="text-sm self-start">Here&lsquo;s a QR code of the link above:</p><div className="self-start">
+                    <p className="text-sm self-start"><strong>Please note: </strong>Do not try to verify the page, as the content is deleted after the first view!</p><p className="text-sm self-start text-sky-500 hover:text-sky-600 hover:underline hover:cursor-pointer" onClick={handleOnClickNewEncrypt}>Encrypt next message.</p><p className="text-sm self-start">Here&lsquo;s a QR code of the link above:</p>
+                    <div className="self-start">
                         {messageUrl ? <QRCodeComponent value={messageUrl} /> : <div></div>}
-                    </div><div className="border-b w-full my-4"></div>
+                    </div>
+                    <div className="border-b w-full my-4"></div>
                 </>
                 :
                 <>
                     {/** Input form for encrypt message */}
-                    <h1 className="text-2xl">Transfer passwords and more</h1><p className="text-sm">This service allows you to encrypt and transfer passwords and other sensitive data to a friend. The recipient can view the page only once!</p><div className="space-y-3 w-full">
+
+                    <h1 className="text-2xl">Transfer passwords and more</h1>
+                    <p className="text-sm">This service allows you to encrypt and transfer passwords and other sensitive data to a friend. The recipient can view the page only once!</p>
+                    <div className="space-y-3 w-full">
                         <textarea
                             className="textarea textarea-bordered w-full"
                             rows={7}
@@ -89,7 +92,14 @@ export default function InputMessageForm() {
 
                         </textarea>
 
-                        <button className="btn bg-green-400 text-white hover:bg-green-500 border-green-600" onClick={handleOnSubmit}>Encrypt & transfer</button>
+                        {isPending ?
+                            <button className="btn bg-green-400 hover:bg-green-400">
+                                <span className="loading loading-spinner"></span>
+                                loading
+                            </button> :
+                            <button className="btn bg-green-400 text-white hover:bg-green-500 border-green-600" onClick={handleOnSubmit}>Encrypt & transfer</button>
+                        }
+
                     </div>
 
                 </>
