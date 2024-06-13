@@ -107,3 +107,7 @@ export function splitString(input: string): [string, string] {
   }
   return [parts[0], parts[1]];
 }
+
+export function replaceDotToHashtag(message: string): string {
+  return message.replace(/\./g, '#');
+}
