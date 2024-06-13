@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import QRCodeComponent from "./QRCodeComponent";
 import { randomString, encrypt, splitString, replaceDotToHashtag } from "@/lib/encrypt";
-import { save } from "@/action/saveSecretAction";
+import { saveSecret } from "@/action/saveSecretAction";
 
 
 export default function InputMessageForm() {
@@ -30,7 +30,7 @@ export default function InputMessageForm() {
 
             setMessageUrl(`${process.env.NEXT_PUBLIC_BASE_URL}/${_messageUrl}`);
 
-            const response = await save(messageRefKey, messageSecretKey);
+            const response = await saveSecret(messageRefKey, messageSecretKey);
             if (response) {
                 setIsSaved(true);
                 setIsPending(false);
