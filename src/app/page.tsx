@@ -1,4 +1,4 @@
-import InputMessageForm from "./_component/InputMessageForm";
+import InputMessageForm from "../components/InputMessageForm";
 
 export default function Home() {
   return (
