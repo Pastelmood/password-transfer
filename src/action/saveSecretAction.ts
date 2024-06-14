@@ -8,16 +8,31 @@ const supabaseUrl = process.env.SUPABASE_URL || "";
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export async function saveSecret(messageKey: string, messageEncrypt: string) {
-  const { data, error } = await supabase
-    .from("message_secret")
-    .insert([{ message_key: messageKey, message_encrypt: messageEncrypt }])
-    .select();
+/**
+ * Saves an encrypted message in the database.
+ *
+ * @param {string} messageKey - The key identifying the message to be saved.
+ * @param {string} messageEncrypt - The encrypted message to be saved.
+ * @returns {Promise<boolean>} A boolean indicating whether the operation was successful.
+ */
+export async function saveSecret(
+  messageKey: string,
+  messageEncrypt: string
+): Promise<boolean> {
+  try {
+    const { data, error } = await supabase
+      .from("message_secret")
+      .insert([{ message_key: messageKey, message_encrypt: messageEncrypt }])
+      .select();
 
-  if (data) {
-    return true;
-  } else {
-    console.log(error);
+    if (error) {
+      console.error("Error saving secret:", error);
+      return false;
+    }
+
+    return data !== null;
+  } catch (err) {
+    console.error("Unexpected error:", err);
     return false;
   }
 }
