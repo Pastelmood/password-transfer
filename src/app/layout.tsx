@@ -3,6 +3,8 @@ import type { Viewport } from 'next';
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import Nav from "@/components/Nav";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
@@ -22,11 +24,17 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      {/* <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head> */}
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <div className="w-full items-center flex flex-col space-y-3">
+            <Nav></Nav>
+            <main className="flex flex-col items-center justify-between">
+              <div className="lg:w-[768px] md:w-[585px] sm:w-96 space-y-3 items-center flex flex-col px-3">
+                {children}
+              </div>
+            </main>
+          </div>
+        </body>
       </html>
     </>
   );

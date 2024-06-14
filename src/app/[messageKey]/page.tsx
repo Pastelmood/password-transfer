@@ -1,25 +1,23 @@
-import ShowDecryptMessageComponent from "@/components/ShowDecryptMessageComponent";
+import { getMessageDecrypt, deleteMessage } from "@/action/saveSecretAction";
+import { splitStringInFirstHalf } from "@/lib/encrypt";
+import MessageFoundComponent from "@/components/MessageFoundComponent";
+import MessageNotFoundComponent from "@/components/MessageNotFoundComponent";
 
-export default async function MessageKeyPage({ params }: { params: { messageKey: string } }) {
-
-    // const messageSecretKey = params.messageKey;
-    // const [_firstHalfMessage, _secondHalfMessage] = splitStringInHalf(messageSecretKey);
-
-    // const message = await getMessageEncrypt(_firstHalfMessage);
-
-    // let messageDecrypt = "";
-
-    // if (message) {
-
-    // } else {
-    //     messageDecrypt = ""
-    // }
-
+export default async function TestPage({ params }: { params: { messageKey: string } }) {
     
+    const firstHalfMessageKey = splitStringInFirstHalf(params.messageKey);
+    const result = await getMessageDecrypt(firstHalfMessageKey, params.messageKey);
 
+    if (result.success) {
+        console.log(await deleteMessage(firstHalfMessageKey));
+        return (          
+            <MessageFoundComponent message={result.message}></MessageFoundComponent>
+        );
+    }
+    
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between">
-            <ShowDecryptMessageComponent messageSecretKey={params.messageKey}></ShowDecryptMessageComponent>
-        </main>
+        <>
+            <MessageNotFoundComponent></MessageNotFoundComponent>
+        </>
     );
 }

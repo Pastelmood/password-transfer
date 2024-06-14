@@ -56,7 +56,7 @@ export default function InputMessageForm() {
 
 
     return (
-        <div className="lg:w-[768px] md:w-[585px] sm:w-96  space-y-3 items-center flex flex-col p-2">
+        <>
             {isSaved ?
                 <>
                     {/** Show url to user */}
@@ -103,6 +103,6 @@ export default function InputMessageForm() {
 
                 </>
             }
-        </div>
+        </>
     )
 }

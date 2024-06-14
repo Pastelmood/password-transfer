@@ -2,6 +2,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { decrypt } from "@/lib/encrypt";
+import { revalidatePath } from "next/cache";
 
 const supabaseUrl = process.env.SUPABASE_URL || "";
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "";
@@ -35,6 +36,8 @@ export async function getMessageDecrypt(
     .select("*")
     .eq("message_key", messageKey);
 
+  revalidatePath("/[messageKey]", "page");
+
   if (error) {
     console.error("Error fetching message encryption:", error);
     return {
@@ -59,4 +62,26 @@ export async function getMessageDecrypt(
     success: false,
     message: "Message not found.",
   };
+}
+
+/**
+ * Deletes a message from the "message_secret" table in the Supabase database based on the provided message key.
+ *
+ * @param {string} messageKey - The key of the message to be deleted.
+ * @returns {Promise<boolean>} - A promise that resolves to `true` if the message was successfully deleted, or `false` if there was an error.
+ */
+export async function deleteMessage(messageKey: string): Promise<boolean> {
+  const { error } = await supabase
+    .from("message_secret")
+    .delete()
+    .eq("message_key", messageKey);
+
+  revalidatePath("/[messageKey]", "page");
+
+  if (error) {
+    console.error(error);
+    return false;
+  }
+
+  return true;
 }

@@ -115,3 +115,18 @@ export function splitStringInHalf(input: string): [string, string] {
 
   return [firstHalf, secondHalf];
 }
+
+
+/**
+ * Splits a string into two equal halves.
+ * If the string length is odd, the extra character will go to the second half.
+ * 
+ * @param input - The string to be split.
+ * @returns A halves of the string.
+ */
+export function splitStringInFirstHalf(input: string): string {
+  const midpoint = Math.ceil(input.length / 2);
+  const firstHalf = input.substring(0, midpoint);
+
+  return firstHalf;
+}
