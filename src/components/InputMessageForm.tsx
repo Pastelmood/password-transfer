@@ -92,7 +92,7 @@ export default function InputMessageForm() {
                         </textarea>
 
                         {isPending ?
-                            <button className="btn bg-green-400 hover:bg-green-400">
+                            <button className="btn bg-green-400 hover:bg-green-400 text-white">
                                 <span className="loading loading-spinner"></span>
                                 loading
                             </button> :
