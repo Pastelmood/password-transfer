@@ -27,26 +27,39 @@ type GetMessageDecryptResult = {
   message: string;
 };
 
+/**
+ * Fetches and decrypts a message from the database.
+ *
+ * @param {string} messageKey - The key identifying the message to be decrypted.
+ * @param {string} messageSecretKey - The secret key used to decrypt the message.
+ * @returns {Promise<GetMessageDecryptResult>} An object containing the success status and the decrypted message or an error message.
+ */
 export async function getMessageDecrypt(
   messageKey: string,
   messageSecretKey: string
 ): Promise<GetMessageDecryptResult> {
-  const { data, error } = await supabase
-    .from("message_secret")
-    .select("*")
-    .eq("message_key", messageKey);
+  try {
+    // Fetch message data from the database
+    const { data, error } = await supabase
+      .from("message_secret")
+      .select("*")
+      .eq("message_key", messageKey);
 
-  revalidatePath("/[messageKey]", "page");
+    // Revalidate the path for the message
+    revalidatePath("/[messageKey]", "page");
 
-  if (error) {
-    console.error("Error fetching message encryption:", error);
-    return {
-      success: false,
-      message: "Message not found.",
-    };
-  }
+    if (error || !data || data.length === 0) {
+      console.error(
+        "Error fetching message encryption:",
+        error || "No data found"
+      );
+      return {
+        success: false,
+        message: "Message not found.",
+      };
+    }
 
-  if (data && data.length > 0) {
+    // Decrypt the message
     const messageDecrypt = await decrypt(
       data[0].message_encrypt,
       messageSecretKey
@@ -55,13 +68,13 @@ export async function getMessageDecrypt(
       success: true,
       message: messageDecrypt,
     };
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    return {
+      success: false,
+      message: "An unexpected error occurred.",
+    };
   }
-
-  // default return
-  return {
-    success: false,
-    message: "Message not found.",
-  };
 }
 
 /**
