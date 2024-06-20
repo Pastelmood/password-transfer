@@ -26,14 +26,15 @@ export default function RootLayout({
     <>
       <html lang="en">
         <body className={inter.className}>
-          <div className="w-full items-center flex flex-col space-y-3">
-            <Nav></Nav>
-            <main className="flex flex-col items-center justify-between">
-              <div className="lg:w-[768px] md:w-[585px] sm:w-96 space-y-3 items-center flex flex-col px-3">
-                {children}
-              </div>
-            </main>
+
+          <Nav></Nav>
+
+          <div className="flex justify-center">
+            <div className="lg:w-[768px] md:w-[585px] w-full p-2">
+              {children}
+            </div>
           </div>
+
         </body>
       </html>
     </>
